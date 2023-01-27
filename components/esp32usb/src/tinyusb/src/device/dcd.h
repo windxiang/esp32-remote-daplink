@@ -56,7 +56,7 @@ typedef enum {
     DCD_EVENT_RESUME,
 
     DCD_EVENT_SETUP_RECEIVED,
-    DCD_EVENT_XFER_COMPLETE, // 发送传输完成
+    DCD_EVENT_XFER_COMPLETE, // 发送传输完成(发送或接收)
 
     // Not an DCD event, just a convenient way to defer ISR function
     USBD_EVENT_FUNC_CALL,

@@ -717,6 +717,11 @@ static void handle_epin_ints(void)
     }
 }
 
+/**
+ * @brief USBD中断函数
+ * 
+ * @param arg 
+ */
 static void _dcd_int_handler(void* arg)
 {
     (void)arg;
@@ -809,6 +814,7 @@ static void _dcd_int_handler(void* arg)
     USB0.gintsts |= USB_CURMOD_INT_M | USB_MODEMIS_M | USB_OTGINT_M | USB_NPTXFEMP_M | USB_GINNAKEFF_M | USB_GOUTNAKEFF | USB_ERLYSUSP_M | USB_USBSUSP_M | USB_ISOOUTDROP_M | USB_EOPF_M | USB_EPMIS_M | USB_INCOMPISOIN_M | USB_INCOMPIP_M | USB_FETSUSP_M | USB_PTXFEMP_M;
 }
 
+// 设置USBD中断
 void dcd_int_enable(uint8_t rhport)
 {
     (void)rhport;

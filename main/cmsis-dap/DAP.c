@@ -363,7 +363,7 @@ static uint32_t DAP_SWJ_Pins(const uint8_t *request, uint8_t *response) {
            (*(request+3) <<  8) |
            (*(request+4) << 16) |
            (*(request+5) << 24);
-printf("asdfasdfasdfsdf\r\n");
+
   if (select & (1U << DAP_SWJ_SWCLK_TCK)) {
     if (value & (1U << DAP_SWJ_SWCLK_TCK)) {
       PIN_SWCLK_TCK_SET();

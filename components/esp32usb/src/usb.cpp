@@ -138,7 +138,7 @@ static void usb_device_task(void* param)
  */
 void start_usb_task()
 {
-    BaseType_t res = xTaskCreatePinnedToCore(usb_device_task, CONFIG_ESPUSB_TASK_NAME, CONFIG_ESPUSB_TASK_STACK_SIZE, nullptr, CONFIG_ESPUSB_TASK_PRIORITY + 100, nullptr, 1);
+    BaseType_t res = xTaskCreatePinnedToCore(usb_device_task, CONFIG_ESPUSB_TASK_NAME, CONFIG_ESPUSB_TASK_STACK_SIZE, nullptr, CONFIG_ESPUSB_TASK_PRIORITY, nullptr, 1);
     if (res != pdPASS) {
         ESP_LOGE(TAG, "Failed to create task for USB.");
         abort();
