@@ -1,0 +1,269 @@
+menu "TinyUSB (esp32usb)"
+    config ESPUSB
+        bool "Enable Esp32USB"
+        default n
+        depends on IDF_TARGET_ESP32S2 || IDF_TARGET_ESP32S3
+        select FREERTOS_SUPPORT_STATIC_ALLOCATION
+        select FREERTOS_USE_AUTHENTIC_INCLUDE_PATHS
+        help
+            Adds support for TinyUSB
+
+    config ESPUSB_MAX_POWER_USAGE
+        int "Max power usage from USB port"
+        default 500
+        depends on ESPUSB
+        help
+            Max power used by device from USB port in mA.
+
+    config ESPUSB_CDC
+        int "Enable USB Serial (CDC) driver"
+        range 0 10
+        default 0
+        depends on ESPUSB
+        help
+            Enable USB Serial (CDC) Esp32USB driver.
+
+    config ESPUSB_MSC
+        bool "Enable Mass Storage (MSC) driver"
+        default n
+        depends on ESPUSB
+        help
+            Enable MSC TinyUSB driver. It is recomended to use Menuconfig-driven descriptor (.descriptor = NULL and
+            .string_descriptor = NULL in the tinyusb_config_t structure).
+
+    config ESPUSB_HID
+        bool "Enable HID driver"
+        default n
+        depends on ESPUSB
+        help
+            Enable HID TinyUSB driver. It is recomended to use Menuconfig-driven descriptor (.descriptor = NULL and
+            .string_descriptor = NULL in the tinyusb_config_t structure).
+
+    config ESPUSB_MIDI
+        bool "Enable MIDI driver"
+        default n
+        depends on ESPUSB
+        help
+            Enable MIDI TinyUSB driver. It is recomended to use Menuconfig-driven descriptor (.descriptor = NULL
+            and .string_descriptor = NULL in the tinyusb_config_t structure).
+
+    config ESPUSB_VENDOR
+        bool "Enable Vendor class driver"
+        default n
+        depends on ESPUSB
+        help
+            Enable USB vendor TinyUSB driver. Currently used by webusb driver.
+
+    config ESPUSB_DFU
+        bool "Enable DFU Runtime"
+        default n
+        depends on ESPUSB
+        help
+            Enable the DFU_RT TinyUSB driver.
+
+    config ESPUSB_CUSTOM_CLASS
+        bool "Enable a custom driver class"
+        default n
+        depends on ESPUSB
+        help
+            Enable a custom TinyUSB class.
+
+    config ESPUSB_DEBUG
+        int "Debug mode"
+        range 0 5
+        default 0
+        depends on ESPUSB
+        help
+            Debug mode
+
+    menu "USB Serial (CDC) Configuration"
+        depends on ESPUSB_CDC > 0
+
+        config ESPUSB_CDC_RX_BUFSIZE
+            int "RX buffer size"
+            range 64 2048
+            default 128
+            help
+                CDC receive buffer size.
+
+        config ESPUSB_CDC_TX_BUFSIZE
+            int "TX buffer size"
+            range 64 2048
+            default 256
+            help
+                CDC transmit buffer size.
+
+        config ESPUSB_CDC_FIFO_SIZE
+            int
+            default 64
+
+        config ESPUSB_CDC_WRITE_FLUSH_TIMEOUT
+            int "Write timeout (milliseconds)"
+            default 10
+    endmenu
+
+    menu "Mass Stoarage (MSC) Configuration"
+        depends on ESPUSB_MSC
+
+        config ESPUSB_MSC_BUFSIZE
+            int
+            default 512
+
+        config ESPUSB_MSC_FIFO_SIZE
+            int
+            default 64
+
+        config ESPUSB_MSC_VENDOR_ID
+            string "MSC Vendor ID"
+            default "ESP32"
+
+        config ESPUSB_MSC_PRODUCT_ID
+            string "MSC Product ID"
+            default "ESP32 Disk"
+
+        config ESPUSB_MSC_PRODUCT_REVISION
+            string "MSC Product revision"
+            default "1.00"
+
+        config ESPUSB_MSC_VDISK_SECTOR_SIZE
+            int
+            default 512
+
+        config ESPUSB_MSC_VDISK_SECTOR_COUNT
+            int
+            default 8192
+
+        config ESPUSB_MSC_VDISK_RESERVED_SECTOR_COUNT
+            int
+            default 1
+
+        config ESPUSB_MSC_VDISK_FILE_COUNT
+            int "Max number of files"
+            default 64
+            range 16 256
+            help
+                Maximum number of files to present on the virtual disk. This is
+                used to calculate how many sectors to reserve for file entries.
+                Each sector can hold up to 16 files, the first sector has one
+                reserved file entry for the disk label. Note, if long filenames
+                are enabled a higher value should be used here as each long
+                filename will use at least two directory entries.
+
+        config ESPUSB_MSC_LONG_FILENAMES
+            bool "Enable long filename support"
+            default n
+            help
+                Enabling this option allows the usage of long filenames up to
+                39 characters. The length limit of 39 characters is derrived
+                from the usage of up to four directory entries per file with
+                three of them for the long filename and one for the file
+                attributes. The short filename will be generated as the first
+                six characters of the filename (without spaces) with ~1 added
+                and no filename extension.
+    endmenu
+
+    menu "Vendor Configuration"
+        depends on ESPUSB_VENDOR
+        config ESPUSB_VENDOR_RX_BUFSIZE
+            int "RX buffer size"
+            range 64 2048
+            default 64
+            help
+                Vendor receive buffer size in bytes.
+
+        config ESPUSB_VENDOR_TX_BUFSIZE
+            int "TX buffer size"
+            range 64 2048
+            default 64
+            help
+                Vendor transmit buffer size in bytes.
+
+        config ESPUSB_VENDOR_FIFO_SIZE
+            int
+            default 64
+    endmenu
+
+    menu "MIDI Configuration"
+        depends on ESPUSB_MIDI
+
+        config ESPUSB_MIDI_RX_BUFSIZE
+            int "RX buffer size"
+            range 64 2048
+            default 128
+            help
+                MIDI receive buffer size in bytes.
+
+        config ESPUSB_MIDI_TX_BUFSIZE
+            int "TX buffer size"
+            range 64 2048
+            default 128
+            help
+                MIDI transmit buffer size in bytes.
+        
+        config ESPUSB_MIDI_FIFO_SIZE
+            int
+            default 64
+    endmenu
+
+    menu "HID Configuration"
+        depends on ESPUSB_HID
+
+        config ESPUSB_HID_BUFSIZE
+            int "Buffer size"
+            default 16
+            help
+                HID buffer size should be sufficient to hold ID (if any) + Data
+    endmenu
+
+    menu "DFU Runtime Configuration"
+        depends on ESPUSB_DFU
+        config ESPUSB_DFU_DISCONNECT_DELAY
+            int
+            default 1000
+
+        config ESPUSB_DFU_BUFSIZE
+            int "Buffer size"
+            range 512 4096
+            default 1024
+            help
+                The DFU buffer size is used for splitting the DFU payload into
+                smaller pieces which may be more managable.
+    endmenu
+
+    menu "USB descriptor configuration"
+        depends on ESPUSB
+        config ESPUSB_USB_VENDOR_ID
+            hex "USB Descriptor Vendor ID"
+            default 0x303A
+            help
+                This is used in the USB Descriptor for the device. The default
+                value of 0x303A is the Espressif Vendor ID.
+
+        config ESPUSB_DESC_BCDDEVICE
+            hex "USB Descriptor BCD Device"
+            default 0x0100
+            help
+                Version of the firmware of the USB device
+    endmenu
+
+    menu "Task configuration"
+
+        config ESPUSB_TASK_NAME
+            string "Name"
+            default "esp-usb"
+
+        config ESPUSB_TASK_STACK_SIZE
+            int "Stack size (bytes)"
+            default 4096
+
+        config ESPUSB_TASK_PRIORITY
+            int "Priority"
+            range 2 25
+            default 5
+            help
+                This is the priority for the Esp32USB executor task. It must be
+                at least one priority level higher than the app_main task.
+
+    endmenu
+
+endmenu
