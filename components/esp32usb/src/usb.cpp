@@ -152,9 +152,9 @@ void start_usb_task()
  */
 void init_esp32_usb(void)
 {
-    static const char* const readme_txt = "This is esp32usb's MassStorage Class demo.\r\n\r\n"
-                                          "If you find any bugs or get any questions, feel free to file an\r\n"
-                                          "issue at github.com/atanisoft/esp32usb";
+    // static const char* const readme_txt = "This is esp32usb's MassStorage Class demo.\r\n\r\n"
+    //                                       "If you find any bugs or get any questions, feel free to file an\r\n"
+    //                                       "issue at github.com/atanisoft/esp32usb";
 
     init_usb_subsystem();
 

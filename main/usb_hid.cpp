@@ -6,8 +6,8 @@
 #include "class/hid/hid_device.h"
 #include "DAP_queue.h"
 #include "DAP.h"
-// #include <freertos/FreeRTOS.h>
-// #include <freertos/task.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
 
 static volatile uint8_t USB_ResponseIdle = 1;
 static DAP_queue DAP_Cmd_queue;
@@ -68,6 +68,7 @@ void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id, hid_report_type_
         if (1 == USB_ResponseIdle) {
             USB_ResponseIdle = 0;
             hid_send_packet();
+            vTaskDelay(2 / portTICK_PERIOD_MS);
         }
     }
 }
